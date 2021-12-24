@@ -7,7 +7,6 @@ import { reducer } from './redux/reducer';
 function App() {
   const [state, dispatch] = React.useReducer(reducer, {
     checkbox: false,
-    checkTask: false,
     inputValue: '',
     tasks: [],
   });
@@ -19,10 +18,10 @@ function App() {
     });
   };
 
-  const onCheck = (bull) => {
+  const onCheck = (bool) => {
     dispatch({
       type: 'box/check',
-      payload: bull,
+      payload: bool,
     });
   };
 
@@ -32,10 +31,10 @@ function App() {
     });
   };
 
-  const addCheckTask = (bull) => {
+  const addCheckTask = (id) => {
     dispatch({
       type: 'task/check',
-      payload: bull,
+      payload: id,
     });
   };
 
@@ -62,17 +61,16 @@ function App() {
         </Tabs>
         <Divider />
         <List>
-          {state.tasks
-            .sort((a, b) => a.id - b.id)
-            .map((obj) => (
-              <Item
-                key={obj.id}
-                text={obj.text}
-                completed={obj.completed}
-                addCheckTask={addCheckTask}
-                checkTask={state.checkTask}
-              />
-            ))}
+          {state.tasks.map((obj) => (
+            <Item
+              key={obj.id}
+              text={obj.text}
+              completed={obj.completed}
+              addCheckTask={addCheckTask}
+              checkTask={state.checkTask}
+              id={obj.id}
+            />
+          ))}
         </List>
         <Divider />
         <div className="check-buttons">

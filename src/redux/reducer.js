@@ -32,7 +32,15 @@ export function reducer(state, action) {
   if (action.type === 'task/check') {
     return {
       ...state,
-      checkTask: action.payload,
+      tasks: state.tasks.map((item) => {
+        if (item.id === action.payload) {
+          return {
+            ...item,
+            completed: !item.completed,
+          };
+        }
+        return item;
+      }),
     };
   }
   return state;
