@@ -38,6 +38,17 @@ function App() {
     });
   };
 
+  const deleteTask = (id) => {
+    // eslint-disable-next-line no-restricted-globals
+    const result = confirm('Вы действительно хотите удалить сообщение?');
+    if (result) {
+      dispatch({
+        type: 'task/delete',
+        payload: id,
+      });
+    }
+  };
+
   console.log(state);
 
   return (
@@ -69,6 +80,7 @@ function App() {
               addCheckTask={addCheckTask}
               checkTask={state.checkTask}
               id={obj.id}
+              deleteTask={deleteTask}
             />
           ))}
         </List>
