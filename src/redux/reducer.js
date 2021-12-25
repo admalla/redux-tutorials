@@ -47,12 +47,7 @@ export function reducer(state, action) {
   if (action.type === 'task/delete') {
     return {
       ...state,
-      tasks: state.tasks.filter((task) => {
-        if (task.id === action.payload) {
-          return false;
-        }
-        return task;
-      }),
+      tasks: state.tasks.filter((item) => item.id !== action.payload),
     };
   }
   return state;
