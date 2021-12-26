@@ -9,7 +9,7 @@ export const AddField = ({ onChange, text, onCheck, onBox, addTask }) => {
   };
 
   const handleChangeChecked = (e) => {
-    onCheck(e.target.checked);
+    text && onCheck(e.target.checked);
   };
 
   return (

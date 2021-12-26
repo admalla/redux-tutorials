@@ -50,5 +50,37 @@ export function reducer(state, action) {
       tasks: state.tasks.filter((item) => item.id !== action.payload),
     };
   }
+
+  if (action.type === 'check/completed/true') {
+    return {
+      ...state,
+      tasks: state.tasks.map((task) => {
+        return {
+          ...task,
+          completed: true,
+        };
+      }),
+    };
+  }
+
+  if (action.type === 'check/completed/false') {
+    return {
+      ...state,
+      tasks: state.tasks.map((task) => {
+        return {
+          ...task,
+          completed: false,
+        };
+      }),
+    };
+  }
+
+  if (action.type === 'tasks/all/remove') {
+    return {
+      ...state,
+      tasks: [],
+    };
+  }
+
   return state;
 }

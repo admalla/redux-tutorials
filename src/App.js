@@ -38,10 +38,20 @@ function App() {
     });
   };
 
+  const changeAllCheckbox = () => {
+    if (state.tasks.every((obj) => obj.completed)) {
+      dispatch({
+        type: 'check/completed/false',
+      });
+    } else {
+      dispatch({
+        type: 'check/completed/true',
+      });
+    }
+  };
+
   const deleteTask = (id) => {
-    // eslint-disable-next-line no-restricted-globals
-    const result = confirm('Вы действительно хотите удалить сообщение?');
-    if (result) {
+    if (window.confirm('Вы действительно хотите удалить задачу?')) {
       dispatch({
         type: 'task/delete',
         payload: id,
@@ -49,7 +59,19 @@ function App() {
     }
   };
 
-  console.log(state);
+  const removeAllTasks = () => {
+    if (window.confirm('Вы действительно хотите удалить все задачи?')) {
+      dispatch({
+        type: 'tasks/all/remove',
+      });
+    }
+  };
+
+  const [value, setValue] = React.useState(0);
+
+  const handleAtiveTab = (e, newValue) => {
+    setValue(newValue);
+  };
 
   return (
     <div className="App">
@@ -65,29 +87,61 @@ function App() {
           addTask={addTask}
         />
         <Divider />
-        <Tabs value={0}>
+        <Tabs onChange={handleAtiveTab} value={value}>
           <Tab label="Все" />
           <Tab label="Активные" />
           <Tab label="Завершённые" />
         </Tabs>
         <Divider />
         <List>
-          {state.tasks.map((obj) => (
-            <Item
-              key={obj.id}
-              text={obj.text}
-              completed={obj.completed}
-              addCheckTask={addCheckTask}
-              checkTask={state.checkTask}
-              id={obj.id}
-              deleteTask={deleteTask}
-            />
-          ))}
+          {/* Ничего другого не придумал кроме этого чудовешного тернарника */}
+          {value === 1
+            ? state.tasks
+                .filter((el) => !el.completed)
+                .map((obj) => (
+                  <Item
+                    key={obj.id}
+                    text={obj.text}
+                    completed={obj.completed}
+                    addCheckTask={addCheckTask}
+                    id={obj.id}
+                    deleteTask={deleteTask}
+                  />
+                ))
+            : value === 2
+            ? state.tasks
+                .filter((el) => el.completed)
+                .map((obj) => (
+                  <Item
+                    key={obj.id}
+                    text={obj.text}
+                    completed={obj.completed}
+                    addCheckTask={addCheckTask}
+                    id={obj.id}
+                    deleteTask={deleteTask}
+                  />
+                ))
+            : state.tasks
+                .filter((el) => el)
+                .map((obj) => (
+                  <Item
+                    key={obj.id}
+                    text={obj.text}
+                    completed={obj.completed}
+                    addCheckTask={addCheckTask}
+                    id={obj.id}
+                    deleteTask={deleteTask}
+                  />
+                ))}
         </List>
         <Divider />
         <div className="check-buttons">
-          <Button>Отметить всё</Button>
-          <Button>Очистить</Button>
+          <Button disabled={!state.tasks.length} onClick={changeAllCheckbox}>
+            {state.tasks.every((obj) => obj.completed === true) ? 'Снять отметки' : 'Отметить всё'}
+          </Button>
+          <Button disabled={!state.tasks.length} onClick={removeAllTasks}>
+            Очистить
+          </Button>
         </div>
       </Paper>
     </div>
