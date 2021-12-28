@@ -94,45 +94,26 @@ function App() {
         </Tabs>
         <Divider />
         <List>
-          {/* Ничего другого не придумал кроме этого чудовешного тернарника */}
-          {value === 1
-            ? state.tasks
-                .filter((el) => !el.completed)
-                .map((obj) => (
-                  <Item
-                    key={obj.id}
-                    text={obj.text}
-                    completed={obj.completed}
-                    addCheckTask={addCheckTask}
-                    id={obj.id}
-                    deleteTask={deleteTask}
-                  />
-                ))
-            : value === 2
-            ? state.tasks
-                .filter((el) => el.completed)
-                .map((obj) => (
-                  <Item
-                    key={obj.id}
-                    text={obj.text}
-                    completed={obj.completed}
-                    addCheckTask={addCheckTask}
-                    id={obj.id}
-                    deleteTask={deleteTask}
-                  />
-                ))
-            : state.tasks
-                .filter((el) => el)
-                .map((obj) => (
-                  <Item
-                    key={obj.id}
-                    text={obj.text}
-                    completed={obj.completed}
-                    addCheckTask={addCheckTask}
-                    id={obj.id}
-                    deleteTask={deleteTask}
-                  />
-                ))}
+          {state.tasks
+            .filter((el) => {
+              if (value === 0) {
+                return true;
+              } else if (value === 1) {
+                return !el.completed;
+              } else {
+                return el.completed;
+              }
+            })
+            .map((obj) => (
+              <Item
+                key={obj.id}
+                text={obj.text}
+                completed={obj.completed}
+                addCheckTask={addCheckTask}
+                id={obj.id}
+                deleteTask={deleteTask}
+              />
+            ))}
         </List>
         <Divider />
         <div className="check-buttons">
